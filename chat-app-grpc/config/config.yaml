@@ -1,0 +1,15 @@
+# Server configurations
+server:
+  host: ""
+  port: "3333"
+
+# Database credentials
+database:
+  user: "root"
+  pass: ""
+  ip   : "127.0.0.1"
+
+# Ports
+ports:
+  rpcport: "4444"
+  rpcip: ""
