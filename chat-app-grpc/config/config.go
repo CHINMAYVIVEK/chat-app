@@ -2,6 +2,7 @@ package config
 
 import (
 	"database/sql"
+	_ "github.com/lib/pq"
 	"fmt"
 	"os"
 
@@ -20,6 +21,7 @@ type Config struct {
 		Username string `yaml:"user", envconfig:"DB_USERNAME"`
 		Password string `yaml:"pass", envconfig:"DB_PASSWORD"`
 		Ip       string `yaml:"ip", envconfig:"DB_IP"`
+		DBName   string `yaml:"name", envconfig:"DB_NAME"`
 	} `yaml:"database"`
 	Ports struct {
 		RpcPort string `yaml:"rpcport", envconfig:"PRC_PORT"`
@@ -71,13 +73,24 @@ func (cfg *Config) DbConnect() {
 	UserName := cfg.Database.Username
 	Password := cfg.Database.Password
 	DBIP := cfg.Database.Ip
-
+	DBName := cfg.Database.DBName
 	fmt.Println(DBIP)
-	dbobj, err := sql.Open("mysql", UserName+":"+Password+"@tcp("+DBIP+")/twitter_db")
+	// dbobj, err := sql.Open("mysql", UserName+":"+Password+"@tcp("+DBIP+")/twitter_db")
+
+	connStr := "postgres://" + UserName + ":" + Password + "@" + DBIP + "/" + DBName + "?sslmode=verify-full"
+	dbobj, err := sql.Open("postgres", connStr)
+
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("=====1===== ", err)
+	}
+	err = dbobj.Ping()
+
+	if err != nil {
+		fmt.Println("=====2===== ", err)
 	}
 	db = dbobj
+
+	fmt.Println("=====Connected!=====")
 }
 
 func GetDb() *sql.DB {

@@ -5,11 +5,14 @@ server:
 
 # Database credentials
 database:
-  user: "root"
-  pass: ""
-  ip   : "127.0.0.1"
+  user: "postgres"
+  pass: "postgres"
+  ip   : "localhost"
+  port : "5432"
+  name : "twitter"
 
 # Ports
 ports:
   rpcport: "4444"
   rpcip: ""
+
