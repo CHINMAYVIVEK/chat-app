@@ -2,9 +2,10 @@ package config
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"fmt"
 	"os"
+
+	_ "github.com/lib/pq"
 
 	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/yaml.v2"
@@ -77,7 +78,8 @@ func (cfg *Config) DbConnect() {
 	fmt.Println(DBIP)
 	// dbobj, err := sql.Open("mysql", UserName+":"+Password+"@tcp("+DBIP+")/twitter_db")
 
-	connStr := "postgres://" + UserName + ":" + Password + "@" + DBIP + "/" + DBName + "?sslmode=verify-full"
+	// connStr := "postgres://" + UserName + ":" + Password + "@" + DBIP + "/" + DBName + "?sslmode=verify-full"
+	connStr := "postgres://" + UserName + ":" + Password + "@" + DBIP + "/" + DBName + "?sslmode=disable"
 	dbobj, err := sql.Open("postgres", connStr)
 
 	if err != nil {

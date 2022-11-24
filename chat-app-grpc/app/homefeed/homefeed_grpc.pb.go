@@ -8,6 +8,7 @@ package homefeed
 
 import (
 	context "context"
+	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HomeFeedServiceClient interface {
-	HomeFeed(ctx context.Context, in *HomeFeedRequest, opts ...grpc.CallOption) (*HomeFeedResponse, error)
+	HomeFeed(ctx context.Context, in *HomeFeedRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
 }
 
 type homeFeedServiceClient struct {
@@ -33,8 +34,8 @@ func NewHomeFeedServiceClient(cc grpc.ClientConnInterface) HomeFeedServiceClient
 	return &homeFeedServiceClient{cc}
 }
 
-func (c *homeFeedServiceClient) HomeFeed(ctx context.Context, in *HomeFeedRequest, opts ...grpc.CallOption) (*HomeFeedResponse, error) {
-	out := new(HomeFeedResponse)
+func (c *homeFeedServiceClient) HomeFeed(ctx context.Context, in *HomeFeedRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error) {
+	out := new(httpbody.HttpBody)
 	err := c.cc.Invoke(ctx, "/homefeed.HomeFeedService/HomeFeed", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,7 +47,7 @@ func (c *homeFeedServiceClient) HomeFeed(ctx context.Context, in *HomeFeedReques
 // All implementations must embed UnimplementedHomeFeedServiceServer
 // for forward compatibility
 type HomeFeedServiceServer interface {
-	HomeFeed(context.Context, *HomeFeedRequest) (*HomeFeedResponse, error)
+	HomeFeed(context.Context, *HomeFeedRequest) (*httpbody.HttpBody, error)
 	mustEmbedUnimplementedHomeFeedServiceServer()
 }
 
@@ -54,7 +55,7 @@ type HomeFeedServiceServer interface {
 type UnimplementedHomeFeedServiceServer struct {
 }
 
-func (UnimplementedHomeFeedServiceServer) HomeFeed(context.Context, *HomeFeedRequest) (*HomeFeedResponse, error) {
+func (UnimplementedHomeFeedServiceServer) HomeFeed(context.Context, *HomeFeedRequest) (*httpbody.HttpBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HomeFeed not implemented")
 }
 func (UnimplementedHomeFeedServiceServer) mustEmbedUnimplementedHomeFeedServiceServer() {}

@@ -3,22 +3,13 @@ package homefeed;
 
 option go_package = "/homefeed";
 
-message HomeFeedResponse {
-string tweet = 1;
-UserDetail user_detail = 2;
-}
+import "google/api/httpbody.proto";
 
-message UserDetail {
-string user_name = 1;
-string user_id = 2;
-string profile_pic =3;
-int32 is_verified =4;
+service HomeFeedService {
+  rpc HomeFeed (HomeFeedRequest) returns (google.api.HttpBody) {}
 }
 
 message HomeFeedRequest {
 string user_id = 1;
 }
 
-service HomeFeedService {
-  rpc HomeFeed (HomeFeedRequest) returns (HomeFeedResponse) {}
-}

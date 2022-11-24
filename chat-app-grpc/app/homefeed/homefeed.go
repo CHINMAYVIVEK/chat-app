@@ -1,27 +1,36 @@
 package homefeed
 
 import (
+	"bytes"
+	helper "chat-app-grpc/helper"
 	"context"
+	"encoding/json"
 
-	_ "github.com/go-sql-driver/mysql"
+	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 )
 
 type HomePageStruct struct {
 	UnimplementedHomeFeedServiceServer
 }
 
-func (s *HomePageStruct) HomeFeed(ctx context.Context, req *HomeFeedRequest) (*HomeFeedResponse, error) {
+func (s *HomePageStruct) HomeFeed(ctx context.Context, req *HomeFeedRequest) (*httpbody.HttpBody, error) {
 
-	userDetailResp := &UserDetail{
-		UserName:   "Chinmay",
-		UserId:     "9876543210",
-		IsVerified: 0,
-		ProfilePic: "pic",
-	}
-	ret := &HomeFeedResponse{
-		UserDetail: userDetailResp,
-		Tweet:      "Test tweet",
-	}
+	var ret *httpbody.HttpBody
 
+	userData, err := FetchUserData(req.UserId)
+	if err != nil {
+		helper.SugarObj.Error(err)
+		return ret, err
+	}
+	helper.SugarObj.Info(userData)
+
+	reqBodyBytes := new(bytes.Buffer)
+	json.NewEncoder(reqBodyBytes).Encode(userData)
+	byteData := reqBodyBytes.Bytes()
+
+	ret = &httpbody.HttpBody{
+		ContentType: "text/json",
+		Data:        byteData,
+	}
 	return ret, nil
 }

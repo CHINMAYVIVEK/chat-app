@@ -20,24 +20,24 @@ func InstallPanicHandler(handler func(interface{})) {
 	additionalHandlers = append(additionalHandlers, handler)
 }
 
-// func handleCrash(handler func(interface{})) {
-// 	if r := recover(); r != nil {
-// 		handler(r)
+func handleCrash(handler func(interface{})) {
+	if r := recover(); r != nil {
+		handler(r)
 
-// 		if additionalHandlers != nil {
-// 			for _, fn := range additionalHandlers {
-// 				fn(r)
-// 			}
-// 		}
-// 	}
-// }
+		if additionalHandlers != nil {
+			for _, fn := range additionalHandlers {
+				fn(r)
+			}
+		}
+	}
+}
 
 func UnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	// defer handleCrash(func(r interface{}) {
-	// 	err := toPanicError(r)
-	// 	helper.SugarObj.Error(err)
-	// 	helper.SugarObj.Error(err)
-	// })
+	defer handleCrash(func(r interface{}) {
+		err := toPanicError(r)
+		helper.SugarObj.Error(err)
+		helper.SugarObj.Error(err)
+	})
 
 	h, err := handler(ctx, req)
 
