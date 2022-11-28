@@ -1,0 +1,14 @@
+syntax = "proto3";
+package userprofile;
+
+option go_package = "/userprofile";
+
+import "google/api/httpbody.proto";
+
+service UserProfileService {
+  rpc UserProfile (UserProfileRequest) returns (google.api.HttpBody) {}
+}
+
+message UserProfileRequest {
+string user_id = 1;
+}
