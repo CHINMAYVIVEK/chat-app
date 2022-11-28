@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserProfileServiceClient interface {
 	UserProfile(ctx context.Context, in *UserProfileRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
+	UserLogin(ctx context.Context, in *UserLoginRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
+	UserRegistration(ctx context.Context, in *UserRegistrationRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
 }
 
 type userProfileServiceClient struct {
@@ -43,11 +45,31 @@ func (c *userProfileServiceClient) UserProfile(ctx context.Context, in *UserProf
 	return out, nil
 }
 
+func (c *userProfileServiceClient) UserLogin(ctx context.Context, in *UserLoginRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error) {
+	out := new(httpbody.HttpBody)
+	err := c.cc.Invoke(ctx, "/userprofile.UserProfileService/UserLogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userProfileServiceClient) UserRegistration(ctx context.Context, in *UserRegistrationRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error) {
+	out := new(httpbody.HttpBody)
+	err := c.cc.Invoke(ctx, "/userprofile.UserProfileService/UserRegistration", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserProfileServiceServer is the server API for UserProfileService service.
 // All implementations must embed UnimplementedUserProfileServiceServer
 // for forward compatibility
 type UserProfileServiceServer interface {
 	UserProfile(context.Context, *UserProfileRequest) (*httpbody.HttpBody, error)
+	UserLogin(context.Context, *UserLoginRequest) (*httpbody.HttpBody, error)
+	UserRegistration(context.Context, *UserRegistrationRequest) (*httpbody.HttpBody, error)
 	mustEmbedUnimplementedUserProfileServiceServer()
 }
 
@@ -57,6 +79,12 @@ type UnimplementedUserProfileServiceServer struct {
 
 func (UnimplementedUserProfileServiceServer) UserProfile(context.Context, *UserProfileRequest) (*httpbody.HttpBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserProfile not implemented")
+}
+func (UnimplementedUserProfileServiceServer) UserLogin(context.Context, *UserLoginRequest) (*httpbody.HttpBody, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserLogin not implemented")
+}
+func (UnimplementedUserProfileServiceServer) UserRegistration(context.Context, *UserRegistrationRequest) (*httpbody.HttpBody, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserRegistration not implemented")
 }
 func (UnimplementedUserProfileServiceServer) mustEmbedUnimplementedUserProfileServiceServer() {}
 
@@ -89,6 +117,42 @@ func _UserProfileService_UserProfile_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserProfileService_UserLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserProfileServiceServer).UserLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userprofile.UserProfileService/UserLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserProfileServiceServer).UserLogin(ctx, req.(*UserLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserProfileService_UserRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRegistrationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserProfileServiceServer).UserRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/userprofile.UserProfileService/UserRegistration",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserProfileServiceServer).UserRegistration(ctx, req.(*UserRegistrationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserProfileService_ServiceDesc is the grpc.ServiceDesc for UserProfileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -99,6 +163,14 @@ var UserProfileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserProfile",
 			Handler:    _UserProfileService_UserProfile_Handler,
+		},
+		{
+			MethodName: "UserLogin",
+			Handler:    _UserProfileService_UserLogin_Handler,
+		},
+		{
+			MethodName: "UserRegistration",
+			Handler:    _UserProfileService_UserRegistration_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

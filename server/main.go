@@ -8,6 +8,7 @@ import (
 	helper "chat-app-grpc/helper"
 
 	homefeed "chat-app-grpc/app/homefeed"
+	userprofile "chat-app-grpc/app/userprofile"
 	config "chat-app-grpc/config"
 	middleware "chat-app-grpc/middleware"
 
@@ -36,7 +37,7 @@ func StartServer() {
 	//helloworld.RegisterYourServiceServer(s, &helloworld.HelloWorldStruct{})
 
 	homefeed.RegisterHomeFeedServiceServer(s, &homefeed.HomePageStruct{})
-
+	userprofile.RegisterUserProfileServiceServer(s, &userprofile.UserProfileStruct{})
 	if err := s.Serve(lis); err != nil {
 		helper.SugarObj.Error(err)
 

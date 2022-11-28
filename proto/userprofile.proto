@@ -7,8 +7,27 @@ import "google/api/httpbody.proto";
 
 service UserProfileService {
   rpc UserProfile (UserProfileRequest) returns (google.api.HttpBody) {}
+  rpc UserLogin (UserLoginRequest) returns (google.api.HttpBody) {}
+  rpc UserRegistration (UserRegistrationRequest) returns (google.api.HttpBody) {}
 }
 
 message UserProfileRequest {
-string user_id = 1;
+  string user_id = 1;
+}
+
+message UserRegistrationRequest{
+  string first_name =1;
+  string middle_name =2;
+  string last_name =4;
+  string email_id =5;
+  string user_name =6;
+  string contact_number =7;
+  string password =8;
+  string confirm_password =9;
+}
+
+message UserLoginRequest{
+  string email_id =5;
+  string user_name =6;
+  string password =7;
 }
