@@ -39,16 +39,26 @@ func (s *UserProfileStruct) UserProfile(ctx context.Context, req *UserProfileReq
 func (s *UserProfileStruct) UserLogin(ctx context.Context, req *UserLoginRequest) (*httpbody.HttpBody, error) {
 
 	userName := req.UserName
-	emailId := req.EmailId
 	password := req.Password
 
-	fmt.Println(userName, emailId, password)
-	resp := userName + emailId + password
+	var data string
 
-	return &httpbody.HttpBody{
+	data = "Login Failed"
+
+	fmt.Println(userName, password)
+
+	ok := GetUserLogin(userName, password)
+
+	// resp := userName + emailId + password
+
+	if ok {
+		data = "Login Successful"
+	}
+	resp := &httpbody.HttpBody{
 		ContentType: "application/json",
-		Data:        []byte(resp),
-	}, nil
+		Data:        []byte(data),
+	}
+	return resp, nil
 
 }
 

@@ -7,9 +7,9 @@ server:
 database:
   user: "postgres"
   pass: "postgres"
-  ip   : "localhost"
-  port : "5432"
-  name : "twitter"
+  ip: "localhost"
+  port: "5432"
+  name: "twitter"
 
 # Ports
 ports:
